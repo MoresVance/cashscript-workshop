@@ -1,8 +1,8 @@
 pragma cashscript ^0.11.0;
 
 
-contract Exercise3 () {
-
+contract Exercise3 (bytes32 contractHash) {
+    
     /*
         make a contract where the user can only spend funds if:
 
@@ -10,5 +10,13 @@ contract Exercise3 () {
         2. the transaction outputs is exactly 1
         3. the spending amount is exactly 1000 satoshis
      */
+    function spend(string password) {
+        bytes32 check = sha256(password);
+
+        require(check == contractHash);
+        require(tx.outputs.length == 1);
+        require(tx.outputs[0].value == 1000);
+
+    }
 
 }

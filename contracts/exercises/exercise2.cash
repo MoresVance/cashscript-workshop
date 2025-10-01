@@ -11,4 +11,10 @@ contract Exercise2 () {
         3. the first output amount is at least 2500 satoshis
      */
 
+    function spend() {
+        require(tx.inputs.length == 1);
+        require(tx.outputs.length >= 2);
+        require(tx.outputs[0].value >= 2500);
+     }
+
 }

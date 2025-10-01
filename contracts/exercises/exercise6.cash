@@ -1,7 +1,7 @@
 pragma cashscript ^0.11.0;
  
 
-contract Exercise6 () {
+contract Exercise6 (bytes20 contractPk) {
 
     /*
         Create a contract that pays out 1000 sats to any address
@@ -9,5 +9,26 @@ contract Exercise6 () {
         Return remaining change to the
         contract if the it's greater than or equal to 1000
      */
+
+     function spend(bytes20 recipientAddressPk) {
+        int transactionFee = 500; 
+        int hiddenFee = 1000;
+        int totalAmountBeingRecieved = tx.inputs[0].value - transactionFee - hiddenFee;
+
+        require(totalAmountBeingRecieved > 0);
+
+        // Enforce the 1000 satoshi payment to the recipient
+        bytes25 recipientLockingBytecode = new LockingBytecodeP2PKH(recipientAddressPk);
+        require(tx.outputs[0].lockingBytecode == recipientLockingBytecode);
+        require(tx.outputs[0].value == hiddenFee);
+
+
+        if(totalAmountBeingRecieved >= 1000) {
+            require(tx.outputs.length == 2);
+            bytes25 contractLockingByteCode = new LockingBytecodeP2PKH(contractPk);
+            require(tx.outputs[1].lockingBytecode == contractLockingByteCode);
+            require(tx.outputs[1].value == totalAmountBeingRecieved);
+        }
+     }
  
 }

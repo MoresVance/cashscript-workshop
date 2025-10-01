@@ -1,7 +1,7 @@
 pragma cashscript ^0.11.0;
 
 
-contract Exercise1 () {
+contract Exercise1 (int max, int min) {
 
     /*
         make a contract where the user can only spend funds if:
@@ -9,5 +9,7 @@ contract Exercise1 () {
         1. the function parameter number should be within range of the max and min
         2. max and min should be declared on the constructor
      */
-
+    function spend (int parameter) {
+        require(within(parameter, min, max));
+    }
 }

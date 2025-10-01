@@ -1,7 +1,7 @@
 pragma cashscript ^0.11.0;
 
 
-contract Exercise5 () {
+contract Exercise5 (bytes20 publicKeyHash) {
 
     /*
         make a contract where the user can only spend funds if:
@@ -9,5 +9,13 @@ contract Exercise5 () {
         1. the recipient is your wallet
         2. the spending amount should not exceed 100,000 satoshis
      */
+
+     function spend() {
+        require(tx.outputs.length == 1);
+        require(tx.outputs[0].value <= 100000);
+        
+        bytes25 recipientLockingBytecode = new LockingBytecodeP2PKH(publicKeyHash);
+        require(tx.outputs[0].lockingBytecode == recipientLockingBytecode);
+     }
 
 }

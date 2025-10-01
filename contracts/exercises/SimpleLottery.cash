@@ -7,6 +7,7 @@ contract SimpleLottery() {
     function play(int luckyNumber) {
         bytes32 hash = sha256(bytes(88));
         int randomNumber = int(hash.split(1)[0]) % 100;
+        console.log(hash);
         require(luckyNumber == randomNumber);
     }
 }
